@@ -1,0 +1,25 @@
+package sqlconst
+
+const (
+	And          = "AND"
+	Or           = "OR"
+	In           = "IN"
+	NotIn        = "NOT IN"
+	Like         = "LIKE"
+	LikeLeft     = "LIKE LEFT"
+	LikeRight    = "LIKE RIGHT"
+	Eq           = "="
+	Ne           = "<>"
+	Gt           = ">"
+	Ge           = ">="
+	Lt           = "<"
+	Le           = "<="
+	IsNull       = "IS NULL"
+	IsNotNull    = "IS NOT NULL"
+	Between      = "BETWEEN"
+	Desc         = "DESC"
+	Asc          = "ASC"
+	LeftBracket  = "("
+	RightBracket = ")"
+	Question     = "?"
+)
