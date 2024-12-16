@@ -41,6 +41,11 @@ func NewExtMapper(tx *gorm.DB, xmlMapperData []byte) (*ExtMapper, error) {
 	return em, nil
 }
 
+func (em *ExtMapper) SetTx(tx *gorm.DB) *ExtMapper {
+	em.tx = tx
+	return em
+}
+
 func GetXmlMapper(xmlData []byte) (*XmlMapper, error) {
 	var xmlMapper XmlMapper
 	if err := xml.Unmarshal(xmlData, &xmlMapper); err != nil {
@@ -66,40 +71,40 @@ func GetXmlMapper(xmlData []byte) (*XmlMapper, error) {
 	return &xmlMapper, nil
 }
 
-func (this *ExtMapper) Select(sqlId string, paramObj any, rx any) error {
-	preparedStmt, params, err := this.GetAndParseSql(sqlId, paramObj)
+func (em *ExtMapper) Select(sqlId string, paramObj any, rx any) error {
+	preparedStmt, params, err := em.GetAndParseSql(sqlId, paramObj)
 	if err != nil {
 		return err
 	}
-	return this.tx.Exec(preparedStmt, params...).Scan(rx).Error
+	return em.tx.Exec(preparedStmt, params...).Scan(rx).Error
 }
 
-func (this *ExtMapper) Insert(sqlId string, paramObj any) error {
-	preparedStmt, params, err := this.GetAndParseSql(sqlId, paramObj)
+func (em *ExtMapper) Insert(sqlId string, paramObj any) error {
+	preparedStmt, params, err := em.GetAndParseSql(sqlId, paramObj)
 	if err != nil {
 		return err
 	}
-	return this.tx.Exec(preparedStmt, params...).Error
+	return em.tx.Exec(preparedStmt, params...).Error
 }
 
-func (this *ExtMapper) Update(sqlId string, paramObj any) error {
-	preparedStmt, params, err := this.GetAndParseSql(sqlId, paramObj)
+func (em *ExtMapper) Update(sqlId string, paramObj any) error {
+	preparedStmt, params, err := em.GetAndParseSql(sqlId, paramObj)
 	if err != nil {
 		return err
 	}
-	return this.tx.Exec(preparedStmt, params...).Error
+	return em.tx.Exec(preparedStmt, params...).Error
 }
 
-func (this *ExtMapper) Delete(sqlId string, paramObj any) error {
-	preparedStmt, params, err := this.GetAndParseSql(sqlId, paramObj)
+func (em *ExtMapper) Delete(sqlId string, paramObj any) error {
+	preparedStmt, params, err := em.GetAndParseSql(sqlId, paramObj)
 	if err != nil {
 		return err
 	}
-	return this.tx.Raw(preparedStmt, params...).Error
+	return em.tx.Raw(preparedStmt, params...).Error
 }
 
-func (this *ExtMapper) GetAndParseSql(sqlId string, paramObj any) (string, []any, error) {
-	sql, err := this.GetSql(sqlId)
+func (em *ExtMapper) GetAndParseSql(sqlId string, paramObj any) (string, []any, error) {
+	sql, err := em.GetSql(sqlId)
 	if err != nil {
 		return "", nil, err
 	}
@@ -134,8 +139,8 @@ func parseSql(sql *XmlSQL, paramObj any) (string, []any, error) {
 	return preparedStmt, queryParams, nil
 }
 
-func (this *ExtMapper) GetSql(sqlId string) (*XmlSQL, error) {
-	sql, exist := this.mapper.Id2Sql[sqlId]
+func (em *ExtMapper) GetSql(sqlId string) (*XmlSQL, error) {
+	sql, exist := em.mapper.Id2Sql[sqlId]
 	if !exist {
 		return nil, errors.New(fmt.Sprintf("Sql '%s' not found", sqlId))
 	}
