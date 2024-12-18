@@ -101,23 +101,23 @@ func (this *QueryWrapper[T]) In(cond bool, column string, vals any) *QueryWrappe
 	return this
 }
 
-func (this *QueryWrapper[T]) Like(cond bool, column string, vals any) *QueryWrapper[T] {
+func (this *QueryWrapper[T]) Like(cond bool, column string, val any) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Like, vals)
+		this.whereSegment.addFilter(column, sqlconst.Like, val)
 	}
 	return this
 }
 
-func (this *QueryWrapper[T]) LikeLeft(cond bool, column string, vals any) *QueryWrapper[T] {
+func (this *QueryWrapper[T]) LikeLeft(cond bool, column string, val any) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.LikeLeft, vals)
+		this.whereSegment.addFilter(column, sqlconst.LikeLeft, val)
 	}
 	return this
 }
 
-func (this *QueryWrapper[T]) LikeRight(cond bool, column string, vals any) *QueryWrapper[T] {
+func (this *QueryWrapper[T]) LikeRight(cond bool, column string, val any) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.LikeRight, vals)
+		this.whereSegment.addFilter(column, sqlconst.LikeRight, val)
 	}
 	return this
 }
@@ -288,23 +288,23 @@ func (this *UpdateWrapper[T]) In(cond bool, column string, vals any) *UpdateWrap
 	return this
 }
 
-func (this *UpdateWrapper[T]) Like(cond bool, column string, vals any) *UpdateWrapper[T] {
+func (this *UpdateWrapper[T]) Like(cond bool, column string, val any) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Like, vals)
+		this.whereSegment.addFilter(column, sqlconst.Like, val)
 	}
 	return this
 }
 
-func (this *UpdateWrapper[T]) LikeLeft(cond bool, column string, vals any) *UpdateWrapper[T] {
+func (this *UpdateWrapper[T]) LikeLeft(cond bool, column string, val any) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.LikeLeft, vals)
+		this.whereSegment.addFilter(column, sqlconst.LikeLeft, val)
 	}
 	return this
 }
 
-func (this *UpdateWrapper[T]) LikeRight(cond bool, column string, vals any) *UpdateWrapper[T] {
+func (this *UpdateWrapper[T]) LikeRight(cond bool, column string, val any) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.LikeRight, vals)
+		this.whereSegment.addFilter(column, sqlconst.LikeRight, val)
 	}
 	return this
 }
