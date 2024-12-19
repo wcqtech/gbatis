@@ -76,7 +76,7 @@ func (em *ExtMapper) Select(sqlId string, paramObj any, rx any) error {
 	if err != nil {
 		return err
 	}
-	return em.tx.Exec(preparedStmt, params...).Scan(rx).Error
+	return em.tx.Raw(preparedStmt, params...).Scan(rx).Error
 }
 
 func (em *ExtMapper) Insert(sqlId string, paramObj any) error {
@@ -100,7 +100,7 @@ func (em *ExtMapper) Delete(sqlId string, paramObj any) error {
 	if err != nil {
 		return err
 	}
-	return em.tx.Raw(preparedStmt, params...).Error
+	return em.tx.Exec(preparedStmt, params...).Error
 }
 
 func (em *ExtMapper) GetAndParseSql(sqlId string, paramObj any) (string, []any, error) {
