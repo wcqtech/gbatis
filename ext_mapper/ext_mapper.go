@@ -108,14 +108,14 @@ func (em *ExtMapper) GetAndParseSql(sqlId string, paramObj any) (string, []any, 
 	if err != nil {
 		return "", nil, err
 	}
-	preparedStmt, params, err := parseSql(sql, paramObj)
+	preparedStmt, params, err := ParseSql(sql, paramObj)
 	if err != nil {
 		return "", nil, err
 	}
 	return preparedStmt, params, nil
 }
 
-func parseSql(sql *XmlSQL, paramObj any) (string, []any, error) {
+func ParseSql(sql *XmlSQL, paramObj any) (string, []any, error) {
 	dynamicTmpl, err := pongo2.FromString(sql.Content)
 	if err != nil {
 		return "", nil, err
