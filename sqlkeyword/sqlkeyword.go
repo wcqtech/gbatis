@@ -1,4 +1,4 @@
-package sqlconst
+package sqlkeyword
 
 const (
 	And          = "AND"

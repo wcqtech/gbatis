@@ -3,7 +3,7 @@ package wrapper
 import (
 	"fmt"
 	"gitee.com/wcqtech/gbatis/gbutil"
-	"gitee.com/wcqtech/gbatis/sqlconst"
+	"gitee.com/wcqtech/gbatis/sqlkeyword"
 	"gorm.io/gorm/schema"
 	"reflect"
 	"strings"
@@ -112,68 +112,68 @@ func (this *SqlFilter) addFilter(column string, key string, val any) {
 	if this.whereSegmentBuilder.Len() > 0 {
 		this.whereSegmentBuilder.WriteString(" ")
 	}
-	if this.whereLastStr != sqlconst.And &&
-		this.whereLastStr != sqlconst.Or &&
+	if this.whereLastStr != sqlkeyword.And &&
+		this.whereLastStr != sqlkeyword.Or &&
 		this.whereLastStr != "" &&
-		this.whereLastStr != sqlconst.LeftBracket &&
-		key != sqlconst.And &&
-		key != sqlconst.Or &&
-		key != sqlconst.RightBracket {
+		this.whereLastStr != sqlkeyword.LeftBracket &&
+		key != sqlkeyword.And &&
+		key != sqlkeyword.Or &&
+		key != sqlkeyword.RightBracket {
 		this.whereSegmentBuilder.WriteString("AND ")
 	}
 	switch key {
-	case sqlconst.IsNull:
+	case sqlkeyword.IsNull:
 		this.whereSegmentBuilder.WriteString(fmt.Sprintf("%s %s", column, key))
-		this.whereLastStr = sqlconst.IsNull
-	case sqlconst.IsNotNull:
+		this.whereLastStr = sqlkeyword.IsNull
+	case sqlkeyword.IsNotNull:
 		this.whereSegmentBuilder.WriteString(fmt.Sprintf("%s %s", column, key))
-		this.whereLastStr = sqlconst.IsNotNull
-	case sqlconst.Like:
+		this.whereLastStr = sqlkeyword.IsNotNull
+	case sqlkeyword.Like:
 		this.whereSegmentBuilder.WriteString(fmt.Sprintf("%s LIKE ?", column))
 		this.whereArgs = append(this.whereArgs, fmt.Sprintf("%%%v%%", val))
-		this.whereLastStr = sqlconst.Question
-	case sqlconst.LikeLeft:
+		this.whereLastStr = sqlkeyword.Question
+	case sqlkeyword.LikeLeft:
 		this.whereSegmentBuilder.WriteString(fmt.Sprintf("%s LIKE ?", column))
 		this.whereArgs = append(this.whereArgs, fmt.Sprintf("%%%v", val))
-		this.whereLastStr = sqlconst.Question
-	case sqlconst.LikeRight:
+		this.whereLastStr = sqlkeyword.Question
+	case sqlkeyword.LikeRight:
 		this.whereSegmentBuilder.WriteString(fmt.Sprintf("%s LIKE ?", column))
 		this.whereArgs = append(this.whereArgs, fmt.Sprintf("%v%%", val))
-		this.whereLastStr = sqlconst.Question
-	case sqlconst.In:
+		this.whereLastStr = sqlkeyword.Question
+	case sqlkeyword.In:
 		list := gbutil.ValidateList(val)
 		this.whereSegmentBuilder.WriteString(fmt.Sprintf("%s IN ?", column))
 		this.whereArgs = append(this.whereArgs, list)
-		this.whereLastStr = sqlconst.RightBracket
-	case sqlconst.NotIn:
+		this.whereLastStr = sqlkeyword.RightBracket
+	case sqlkeyword.NotIn:
 		list := gbutil.ValidateList(val)
 		this.whereSegmentBuilder.WriteString(fmt.Sprintf("%s NOT IN ?", column))
 		this.whereArgs = append(this.whereArgs, list)
-		this.whereLastStr = sqlconst.RightBracket
-	case sqlconst.Between:
+		this.whereLastStr = sqlkeyword.RightBracket
+	case sqlkeyword.Between:
 		if arr, ok := val.([2]any); ok {
 			this.whereSegmentBuilder.WriteString(fmt.Sprintf("%s BETWEEN ? AND ?", column))
 			this.whereArgs = append(this.whereArgs, arr[0], arr[1])
-			this.whereLastStr = sqlconst.Question
+			this.whereLastStr = sqlkeyword.Question
 		} else {
 			panic("ERROR VALUE TYPE")
 		}
-	case sqlconst.Or:
-		this.whereSegmentBuilder.WriteString(sqlconst.Or)
-		this.whereLastStr = sqlconst.Or
-	case sqlconst.And:
-		this.whereSegmentBuilder.WriteString(sqlconst.And)
-		this.whereLastStr = sqlconst.And
-	case sqlconst.LeftBracket:
-		this.whereSegmentBuilder.WriteString(sqlconst.LeftBracket)
-		this.whereLastStr = sqlconst.LeftBracket
-	case sqlconst.RightBracket:
-		this.whereSegmentBuilder.WriteString(sqlconst.RightBracket)
-		this.whereLastStr = sqlconst.RightBracket
+	case sqlkeyword.Or:
+		this.whereSegmentBuilder.WriteString(sqlkeyword.Or)
+		this.whereLastStr = sqlkeyword.Or
+	case sqlkeyword.And:
+		this.whereSegmentBuilder.WriteString(sqlkeyword.And)
+		this.whereLastStr = sqlkeyword.And
+	case sqlkeyword.LeftBracket:
+		this.whereSegmentBuilder.WriteString(sqlkeyword.LeftBracket)
+		this.whereLastStr = sqlkeyword.LeftBracket
+	case sqlkeyword.RightBracket:
+		this.whereSegmentBuilder.WriteString(sqlkeyword.RightBracket)
+		this.whereLastStr = sqlkeyword.RightBracket
 	default:
 		this.whereSegmentBuilder.WriteString(fmt.Sprintf("%s %s ?", column, key))
 		this.whereArgs = append(this.whereArgs, val)
-		this.whereLastStr = sqlconst.Question
+		this.whereLastStr = sqlkeyword.Question
 	}
 }
 

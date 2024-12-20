@@ -1,7 +1,7 @@
 package wrapper
 
 import (
-	"gitee.com/wcqtech/gbatis/sqlconst"
+	"gitee.com/wcqtech/gbatis/sqlkeyword"
 	"gorm.io/gorm/schema"
 )
 
@@ -32,56 +32,56 @@ func NewUpdateWrapper[T schema.Tabler]() *UpdateWrapper[T] {
 
 func (this *QueryWrapper[T]) Eq(cond bool, column string, val any) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Eq, val)
+		this.whereSegment.addFilter(column, sqlkeyword.Eq, val)
 	}
 	return this
 }
 
 func (this *QueryWrapper[T]) Ne(cond bool, column string, val any) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Ne, val)
+		this.whereSegment.addFilter(column, sqlkeyword.Ne, val)
 	}
 	return this
 }
 
 func (this *QueryWrapper[T]) Gt(cond bool, column string, val any) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Gt, val)
+		this.whereSegment.addFilter(column, sqlkeyword.Gt, val)
 	}
 	return this
 }
 
 func (this *QueryWrapper[T]) Ge(cond bool, column string, val any) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Ge, val)
+		this.whereSegment.addFilter(column, sqlkeyword.Ge, val)
 	}
 	return this
 }
 
 func (this *QueryWrapper[T]) Lt(cond bool, column string, val any) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Lt, val)
+		this.whereSegment.addFilter(column, sqlkeyword.Lt, val)
 	}
 	return this
 }
 
 func (this *QueryWrapper[T]) Le(cond bool, column string, val any) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Le, val)
+		this.whereSegment.addFilter(column, sqlkeyword.Le, val)
 	}
 	return this
 }
 
 func (this *QueryWrapper[T]) IsNull(cond bool, column string) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.IsNull, nil)
+		this.whereSegment.addFilter(column, sqlkeyword.IsNull, nil)
 	}
 	return this
 }
 
 func (this *QueryWrapper[T]) IsNotNull(cond bool, column string) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.IsNotNull, nil)
+		this.whereSegment.addFilter(column, sqlkeyword.IsNotNull, nil)
 	}
 	return this
 }
@@ -89,46 +89,46 @@ func (this *QueryWrapper[T]) IsNotNull(cond bool, column string) *QueryWrapper[T
 func (this *QueryWrapper[T]) Between(cond bool, column string, val1 any, val2 any) *QueryWrapper[T] {
 	vals := [2]any{val1, val2}
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Between, vals)
+		this.whereSegment.addFilter(column, sqlkeyword.Between, vals)
 	}
 	return this
 }
 
 func (this *QueryWrapper[T]) In(cond bool, column string, vals any) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.In, vals)
+		this.whereSegment.addFilter(column, sqlkeyword.In, vals)
 	}
 	return this
 }
 
 func (this *QueryWrapper[T]) Like(cond bool, column string, val any) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Like, val)
+		this.whereSegment.addFilter(column, sqlkeyword.Like, val)
 	}
 	return this
 }
 
 func (this *QueryWrapper[T]) LikeLeft(cond bool, column string, val any) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.LikeLeft, val)
+		this.whereSegment.addFilter(column, sqlkeyword.LikeLeft, val)
 	}
 	return this
 }
 
 func (this *QueryWrapper[T]) LikeRight(cond bool, column string, val any) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.LikeRight, val)
+		this.whereSegment.addFilter(column, sqlkeyword.LikeRight, val)
 	}
 	return this
 }
 
 func (this *QueryWrapper[T]) Or(cond bool, fn func(wp *QueryWrapper[T])) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter("", sqlconst.Or, nil)
+		this.whereSegment.addFilter("", sqlkeyword.Or, nil)
 		if fn != nil {
-			this.whereSegment.addFilter("", sqlconst.LeftBracket, nil)
+			this.whereSegment.addFilter("", sqlkeyword.LeftBracket, nil)
 			fn(this)
-			this.whereSegment.addFilter("", sqlconst.RightBracket, nil)
+			this.whereSegment.addFilter("", sqlkeyword.RightBracket, nil)
 		}
 	}
 	return this
@@ -136,11 +136,11 @@ func (this *QueryWrapper[T]) Or(cond bool, fn func(wp *QueryWrapper[T])) *QueryW
 
 func (this *QueryWrapper[T]) And(cond bool, fn func(wp *QueryWrapper[T])) *QueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter("", sqlconst.And, nil)
+		this.whereSegment.addFilter("", sqlkeyword.And, nil)
 		if fn != nil {
-			this.whereSegment.addFilter("", sqlconst.LeftBracket, nil)
+			this.whereSegment.addFilter("", sqlkeyword.LeftBracket, nil)
 			fn(this)
-			this.whereSegment.addFilter("", sqlconst.RightBracket, nil)
+			this.whereSegment.addFilter("", sqlkeyword.RightBracket, nil)
 		}
 	}
 	return this
@@ -148,14 +148,14 @@ func (this *QueryWrapper[T]) And(cond bool, fn func(wp *QueryWrapper[T])) *Query
 
 func (this *QueryWrapper[T]) OrderByAsc(cond bool, column string) *QueryWrapper[T] {
 	if cond {
-		this.selectSegment.addOrder(column, sqlconst.Asc)
+		this.selectSegment.addOrder(column, sqlkeyword.Asc)
 	}
 	return this
 }
 
 func (this *QueryWrapper[T]) OrderByDesc(cond bool, column string) *QueryWrapper[T] {
 	if cond {
-		this.selectSegment.addOrder(column, sqlconst.Desc)
+		this.selectSegment.addOrder(column, sqlkeyword.Desc)
 	}
 	return this
 }
@@ -219,56 +219,56 @@ func (this *QueryWrapper[T]) GetLimit() int {
 
 func (this *UpdateWrapper[T]) Eq(cond bool, column string, val any) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Eq, val)
+		this.whereSegment.addFilter(column, sqlkeyword.Eq, val)
 	}
 	return this
 }
 
 func (this *UpdateWrapper[T]) Ne(cond bool, column string, val any) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Ne, val)
+		this.whereSegment.addFilter(column, sqlkeyword.Ne, val)
 	}
 	return this
 }
 
 func (this *UpdateWrapper[T]) Gt(cond bool, column string, val any) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Gt, val)
+		this.whereSegment.addFilter(column, sqlkeyword.Gt, val)
 	}
 	return this
 }
 
 func (this *UpdateWrapper[T]) Ge(cond bool, column string, val any) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Ge, val)
+		this.whereSegment.addFilter(column, sqlkeyword.Ge, val)
 	}
 	return this
 }
 
 func (this *UpdateWrapper[T]) Lt(cond bool, column string, val any) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Lt, val)
+		this.whereSegment.addFilter(column, sqlkeyword.Lt, val)
 	}
 	return this
 }
 
 func (this *UpdateWrapper[T]) Le(cond bool, column string, val any) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Le, val)
+		this.whereSegment.addFilter(column, sqlkeyword.Le, val)
 	}
 	return this
 }
 
 func (this *UpdateWrapper[T]) IsNull(cond bool, column string) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.IsNull, nil)
+		this.whereSegment.addFilter(column, sqlkeyword.IsNull, nil)
 	}
 	return this
 }
 
 func (this *UpdateWrapper[T]) IsNotNull(cond bool, column string) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.IsNotNull, nil)
+		this.whereSegment.addFilter(column, sqlkeyword.IsNotNull, nil)
 	}
 	return this
 }
@@ -276,46 +276,46 @@ func (this *UpdateWrapper[T]) IsNotNull(cond bool, column string) *UpdateWrapper
 func (this *UpdateWrapper[T]) Between(cond bool, column string, val1 any, val2 any) *UpdateWrapper[T] {
 	vals := [2]any{val1, val2}
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Between, vals)
+		this.whereSegment.addFilter(column, sqlkeyword.Between, vals)
 	}
 	return this
 }
 
 func (this *UpdateWrapper[T]) In(cond bool, column string, vals any) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.In, vals)
+		this.whereSegment.addFilter(column, sqlkeyword.In, vals)
 	}
 	return this
 }
 
 func (this *UpdateWrapper[T]) Like(cond bool, column string, val any) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.Like, val)
+		this.whereSegment.addFilter(column, sqlkeyword.Like, val)
 	}
 	return this
 }
 
 func (this *UpdateWrapper[T]) LikeLeft(cond bool, column string, val any) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.LikeLeft, val)
+		this.whereSegment.addFilter(column, sqlkeyword.LikeLeft, val)
 	}
 	return this
 }
 
 func (this *UpdateWrapper[T]) LikeRight(cond bool, column string, val any) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(column, sqlconst.LikeRight, val)
+		this.whereSegment.addFilter(column, sqlkeyword.LikeRight, val)
 	}
 	return this
 }
 
 func (this *UpdateWrapper[T]) Or(cond bool, fn func(wp *UpdateWrapper[T])) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter("", sqlconst.Or, nil)
+		this.whereSegment.addFilter("", sqlkeyword.Or, nil)
 		if fn != nil {
-			this.whereSegment.addFilter("", sqlconst.LeftBracket, nil)
+			this.whereSegment.addFilter("", sqlkeyword.LeftBracket, nil)
 			fn(this)
-			this.whereSegment.addFilter("", sqlconst.RightBracket, nil)
+			this.whereSegment.addFilter("", sqlkeyword.RightBracket, nil)
 		}
 	}
 	return this
@@ -323,11 +323,11 @@ func (this *UpdateWrapper[T]) Or(cond bool, fn func(wp *UpdateWrapper[T])) *Upda
 
 func (this *UpdateWrapper[T]) And(cond bool, fn func(wp *UpdateWrapper[T])) *UpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter("", sqlconst.And, nil)
+		this.whereSegment.addFilter("", sqlkeyword.And, nil)
 		if fn != nil {
-			this.whereSegment.addFilter("", sqlconst.LeftBracket, nil)
+			this.whereSegment.addFilter("", sqlkeyword.LeftBracket, nil)
 			fn(this)
-			this.whereSegment.addFilter("", sqlconst.RightBracket, nil)
+			this.whereSegment.addFilter("", sqlkeyword.RightBracket, nil)
 		}
 	}
 	return this
