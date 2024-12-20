@@ -14,9 +14,9 @@ type BaseMapper[T schema.Tabler] struct {
 	batchSize int
 }
 
-func NewBaseMapper[T schema.Tabler](db *gorm.DB) *BaseMapper[T] {
+func NewBaseMapper[T schema.Tabler](tx *gorm.DB) *BaseMapper[T] {
 	bm := new(BaseMapper[T])
-	bm.tx = db
+	bm.tx = tx
 	bm.batchSize = 1000
 	return bm
 }
