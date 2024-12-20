@@ -48,7 +48,6 @@ func initField2Column[T schema.Tabler](entity *T, f2c *map[uintptr]string) {
 	for i := 0; i < valueOf.NumField(); i++ {
 		field := typeOf.Field(i)
 		if field.Anonymous {
-			//嵌套 兼容gorm.Model
 			initNestedField2Column(valueOf, field, f2c)
 		} else {
 			pointer := valueOf.Field(i).Addr().Pointer()
@@ -82,15 +81,14 @@ func parseColumnName(field reflect.StructField) string {
 		return name
 	}
 	return gbatis.GetConf().NamingStrategy.ColumnName("", field.Name)
-	//return strings.ToLower(field.Name)
 }
 
-func (uwp *LambdaQueryWrapper[T]) getColumn(field any) string {
-	return getColumn(uwp.field2Column, field)
+func (qwp *LambdaQueryWrapper[T]) getColumn(field any) string {
+	return getColumn(qwp.field2Column, field)
 }
 
-func (uwp *LambdaQueryWrapper[T]) getColumns(fields []any) []string {
-	return getColumns(uwp.field2Column, fields)
+func (qwp *LambdaQueryWrapper[T]) getColumns(fields []any) []string {
+	return getColumns(qwp.field2Column, fields)
 }
 
 func (uwp *LambdaUpdateWrapper[T]) getColumn(field any) string {
@@ -118,320 +116,320 @@ func getColumns(mp map[uintptr]string, fields []any) []string {
 	return columns
 }
 
-func (this *LambdaQueryWrapper[T]) Eq(cond bool, field any, val any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) Eq(cond bool, field any, val any) *LambdaQueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.Eq, val)
+		qwp.whereSegment.addFilter(qwp.getColumn(field), sqlkeyword.Eq, val)
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) Ne(cond bool, field any, val any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) Ne(cond bool, field any, val any) *LambdaQueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.Ne, val)
+		qwp.whereSegment.addFilter(qwp.getColumn(field), sqlkeyword.Ne, val)
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) Gt(cond bool, field any, val any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) Gt(cond bool, field any, val any) *LambdaQueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.Gt, val)
+		qwp.whereSegment.addFilter(qwp.getColumn(field), sqlkeyword.Gt, val)
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) Ge(cond bool, field any, val any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) Ge(cond bool, field any, val any) *LambdaQueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.Ge, val)
+		qwp.whereSegment.addFilter(qwp.getColumn(field), sqlkeyword.Ge, val)
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) Lt(cond bool, field any, val any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) Lt(cond bool, field any, val any) *LambdaQueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.Lt, val)
+		qwp.whereSegment.addFilter(qwp.getColumn(field), sqlkeyword.Lt, val)
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) Le(cond bool, field any, val any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) Le(cond bool, field any, val any) *LambdaQueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.Le, val)
+		qwp.whereSegment.addFilter(qwp.getColumn(field), sqlkeyword.Le, val)
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) IsNull(cond bool, field any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) IsNull(cond bool, field any) *LambdaQueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.IsNull, nil)
+		qwp.whereSegment.addFilter(qwp.getColumn(field), sqlkeyword.IsNull, nil)
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) IsNotNull(cond bool, field any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) IsNotNull(cond bool, field any) *LambdaQueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.IsNotNull, nil)
+		qwp.whereSegment.addFilter(qwp.getColumn(field), sqlkeyword.IsNotNull, nil)
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) Between(cond bool, field any, val1 any, val2 any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) Between(cond bool, field any, val1 any, val2 any) *LambdaQueryWrapper[T] {
 	vals := [2]any{val1, val2}
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.Between, vals)
+		qwp.whereSegment.addFilter(qwp.getColumn(field), sqlkeyword.Between, vals)
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) In(cond bool, field any, vals any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) In(cond bool, field any, vals any) *LambdaQueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.In, vals)
+		qwp.whereSegment.addFilter(qwp.getColumn(field), sqlkeyword.In, vals)
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) Like(cond bool, field any, val any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) Like(cond bool, field any, val any) *LambdaQueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.Like, val)
+		qwp.whereSegment.addFilter(qwp.getColumn(field), sqlkeyword.Like, val)
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) LikeLeft(cond bool, field any, val any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) LikeLeft(cond bool, field any, val any) *LambdaQueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.LikeLeft, val)
+		qwp.whereSegment.addFilter(qwp.getColumn(field), sqlkeyword.LikeLeft, val)
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) LikeRight(cond bool, field any, val any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) LikeRight(cond bool, field any, val any) *LambdaQueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.LikeRight, val)
+		qwp.whereSegment.addFilter(qwp.getColumn(field), sqlkeyword.LikeRight, val)
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) Or(cond bool, fn func(wp *LambdaQueryWrapper[T])) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) Or(cond bool, fn func(wp *LambdaQueryWrapper[T])) *LambdaQueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter("", sqlkeyword.Or, nil)
+		qwp.whereSegment.addFilter("", sqlkeyword.Or, nil)
 		if fn != nil {
-			this.whereSegment.addFilter("", sqlkeyword.LeftBracket, nil)
-			fn(this)
-			this.whereSegment.addFilter("", sqlkeyword.RightBracket, nil)
+			qwp.whereSegment.addFilter("", sqlkeyword.LeftBracket, nil)
+			fn(qwp)
+			qwp.whereSegment.addFilter("", sqlkeyword.RightBracket, nil)
 		}
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) And(cond bool, fn func(wp *LambdaQueryWrapper[T])) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) And(cond bool, fn func(wp *LambdaQueryWrapper[T])) *LambdaQueryWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter("", sqlkeyword.And, nil)
+		qwp.whereSegment.addFilter("", sqlkeyword.And, nil)
 		if fn != nil {
-			this.whereSegment.addFilter("", sqlkeyword.LeftBracket, nil)
-			fn(this)
-			this.whereSegment.addFilter("", sqlkeyword.RightBracket, nil)
+			qwp.whereSegment.addFilter("", sqlkeyword.LeftBracket, nil)
+			fn(qwp)
+			qwp.whereSegment.addFilter("", sqlkeyword.RightBracket, nil)
 		}
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) OrderByAsc(cond bool, field any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) OrderByAsc(cond bool, field any) *LambdaQueryWrapper[T] {
 	if cond {
-		this.selectSegment.addOrder(this.getColumn(field), sqlkeyword.Asc)
+		qwp.selectSegment.addOrder(qwp.getColumn(field), sqlkeyword.Asc)
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) OrderByDesc(cond bool, field any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) OrderByDesc(cond bool, field any) *LambdaQueryWrapper[T] {
 	if cond {
-		this.selectSegment.addOrder(this.getColumn(field), sqlkeyword.Desc)
+		qwp.selectSegment.addOrder(qwp.getColumn(field), sqlkeyword.Desc)
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) GroupBy(cond bool, field any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) GroupBy(cond bool, field any) *LambdaQueryWrapper[T] {
 	if cond {
-		this.selectSegment.addGorup(this.getColumn(field))
+		qwp.selectSegment.addGorup(qwp.getColumn(field))
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) Having(cond bool, sqlHaving string, vals ...any) *LambdaQueryWrapper[T] {
+func (qwp *LambdaQueryWrapper[T]) Having(cond bool, sqlHaving string, vals ...any) *LambdaQueryWrapper[T] {
 	if cond {
-		this.selectSegment.addHaving(sqlHaving, vals)
+		qwp.selectSegment.addHaving(sqlHaving, vals)
 	}
-	return this
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) Select(fields ...any) *LambdaQueryWrapper[T] {
-	this.selectSegment.addSelect(this.getColumns(fields))
-	return this
+func (qwp *LambdaQueryWrapper[T]) Select(fields ...any) *LambdaQueryWrapper[T] {
+	qwp.selectSegment.addSelect(qwp.getColumns(fields))
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) Offset(offset int) *LambdaQueryWrapper[T] {
-	this.selectSegment.addOffset(offset)
-	return this
+func (qwp *LambdaQueryWrapper[T]) Offset(offset int) *LambdaQueryWrapper[T] {
+	qwp.selectSegment.addOffset(offset)
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) Limit(limit int) *LambdaQueryWrapper[T] {
-	this.selectSegment.addLimit(limit)
-	return this
+func (qwp *LambdaQueryWrapper[T]) Limit(limit int) *LambdaQueryWrapper[T] {
+	qwp.selectSegment.addLimit(limit)
+	return qwp
 }
 
-func (this *LambdaQueryWrapper[T]) GetWhere() (string, []any) {
-	return this.whereSegment.GetWhere()
+func (qwp *LambdaQueryWrapper[T]) GetWhere() (string, []any) {
+	return qwp.whereSegment.GetWhere()
 }
 
-func (this *LambdaQueryWrapper[T]) GetOrderBy() string {
-	return this.selectSegment.GetOrderBy()
+func (qwp *LambdaQueryWrapper[T]) GetOrderBy() string {
+	return qwp.selectSegment.GetOrderBy()
 }
 
-func (this *LambdaQueryWrapper[T]) GetSelect() string {
-	return this.selectSegment.GetSelect()
+func (qwp *LambdaQueryWrapper[T]) GetSelect() string {
+	return qwp.selectSegment.GetSelect()
 }
 
-func (this *LambdaQueryWrapper[T]) GetGroupBy() string {
-	return this.selectSegment.GetGroupBy()
+func (qwp *LambdaQueryWrapper[T]) GetGroupBy() string {
+	return qwp.selectSegment.GetGroupBy()
 }
 
-func (this *LambdaQueryWrapper[T]) GetHaving() (string, []any) {
-	return this.selectSegment.GetHaving()
+func (qwp *LambdaQueryWrapper[T]) GetHaving() (string, []any) {
+	return qwp.selectSegment.GetHaving()
 }
 
-func (this LambdaQueryWrapper[T]) GetOffset() int {
-	return this.selectSegment.GetOffset()
+func (qwp LambdaQueryWrapper[T]) GetOffset() int {
+	return qwp.selectSegment.GetOffset()
 }
 
-func (this LambdaQueryWrapper[T]) GetLimit() int {
-	return this.selectSegment.GetLimit()
+func (qwp LambdaQueryWrapper[T]) GetLimit() int {
+	return qwp.selectSegment.GetLimit()
 }
 
-func (this *LambdaUpdateWrapper[T]) Eq(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
+func (uwp *LambdaUpdateWrapper[T]) Eq(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.Eq, val)
+		uwp.whereSegment.addFilter(uwp.getColumn(field), sqlkeyword.Eq, val)
 	}
-	return this
+	return uwp
 }
 
-func (this *LambdaUpdateWrapper[T]) Ne(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
+func (uwp *LambdaUpdateWrapper[T]) Ne(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.Ne, val)
+		uwp.whereSegment.addFilter(uwp.getColumn(field), sqlkeyword.Ne, val)
 	}
-	return this
+	return uwp
 }
 
-func (this *LambdaUpdateWrapper[T]) Gt(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
+func (uwp *LambdaUpdateWrapper[T]) Gt(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.Gt, val)
+		uwp.whereSegment.addFilter(uwp.getColumn(field), sqlkeyword.Gt, val)
 	}
-	return this
+	return uwp
 }
 
-func (this *LambdaUpdateWrapper[T]) Ge(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
+func (uwp *LambdaUpdateWrapper[T]) Ge(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.Ge, val)
+		uwp.whereSegment.addFilter(uwp.getColumn(field), sqlkeyword.Ge, val)
 	}
-	return this
+	return uwp
 }
 
-func (this *LambdaUpdateWrapper[T]) Lt(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
+func (uwp *LambdaUpdateWrapper[T]) Lt(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.Lt, val)
+		uwp.whereSegment.addFilter(uwp.getColumn(field), sqlkeyword.Lt, val)
 	}
-	return this
+	return uwp
 }
 
-func (this *LambdaUpdateWrapper[T]) Le(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
+func (uwp *LambdaUpdateWrapper[T]) Le(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.Le, val)
+		uwp.whereSegment.addFilter(uwp.getColumn(field), sqlkeyword.Le, val)
 	}
-	return this
+	return uwp
 }
 
-func (this *LambdaUpdateWrapper[T]) IsNull(cond bool, field any) *LambdaUpdateWrapper[T] {
+func (uwp *LambdaUpdateWrapper[T]) IsNull(cond bool, field any) *LambdaUpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.IsNull, nil)
+		uwp.whereSegment.addFilter(uwp.getColumn(field), sqlkeyword.IsNull, nil)
 	}
-	return this
+	return uwp
 }
 
-func (this *LambdaUpdateWrapper[T]) IsNotNull(cond bool, field any) *LambdaUpdateWrapper[T] {
+func (uwp *LambdaUpdateWrapper[T]) IsNotNull(cond bool, field any) *LambdaUpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.IsNotNull, nil)
+		uwp.whereSegment.addFilter(uwp.getColumn(field), sqlkeyword.IsNotNull, nil)
 	}
-	return this
+	return uwp
 }
 
-func (this *LambdaUpdateWrapper[T]) Between(cond bool, field any, val1 any, val2 any) *LambdaUpdateWrapper[T] {
+func (uwp *LambdaUpdateWrapper[T]) Between(cond bool, field any, val1 any, val2 any) *LambdaUpdateWrapper[T] {
 	vals := [2]any{val1, val2}
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.Between, vals)
+		uwp.whereSegment.addFilter(uwp.getColumn(field), sqlkeyword.Between, vals)
 	}
-	return this
+	return uwp
 }
 
-func (this *LambdaUpdateWrapper[T]) In(cond bool, field any, vals any) *LambdaUpdateWrapper[T] {
+func (uwp *LambdaUpdateWrapper[T]) In(cond bool, field any, vals any) *LambdaUpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.In, vals)
+		uwp.whereSegment.addFilter(uwp.getColumn(field), sqlkeyword.In, vals)
 	}
-	return this
+	return uwp
 }
 
-func (this *LambdaUpdateWrapper[T]) Like(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
+func (uwp *LambdaUpdateWrapper[T]) Like(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.Like, val)
+		uwp.whereSegment.addFilter(uwp.getColumn(field), sqlkeyword.Like, val)
 	}
-	return this
+	return uwp
 }
 
-func (this *LambdaUpdateWrapper[T]) LikeLeft(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
+func (uwp *LambdaUpdateWrapper[T]) LikeLeft(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.LikeLeft, val)
+		uwp.whereSegment.addFilter(uwp.getColumn(field), sqlkeyword.LikeLeft, val)
 	}
-	return this
+	return uwp
 }
 
-func (this *LambdaUpdateWrapper[T]) LikeRight(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
+func (uwp *LambdaUpdateWrapper[T]) LikeRight(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter(this.getColumn(field), sqlkeyword.LikeRight, val)
+		uwp.whereSegment.addFilter(uwp.getColumn(field), sqlkeyword.LikeRight, val)
 	}
-	return this
+	return uwp
 }
 
-func (this *LambdaUpdateWrapper[T]) Or(cond bool, fn func(wp *LambdaUpdateWrapper[T])) *LambdaUpdateWrapper[T] {
+func (uwp *LambdaUpdateWrapper[T]) Or(cond bool, fn func(wp *LambdaUpdateWrapper[T])) *LambdaUpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter("", sqlkeyword.Or, nil)
+		uwp.whereSegment.addFilter("", sqlkeyword.Or, nil)
 		if fn != nil {
-			this.whereSegment.addFilter("", sqlkeyword.LeftBracket, nil)
-			fn(this)
-			this.whereSegment.addFilter("", sqlkeyword.RightBracket, nil)
+			uwp.whereSegment.addFilter("", sqlkeyword.LeftBracket, nil)
+			fn(uwp)
+			uwp.whereSegment.addFilter("", sqlkeyword.RightBracket, nil)
 		}
 	}
-	return this
+	return uwp
 }
 
-func (this *LambdaUpdateWrapper[T]) And(cond bool, fn func(wp *LambdaUpdateWrapper[T])) *LambdaUpdateWrapper[T] {
+func (uwp *LambdaUpdateWrapper[T]) And(cond bool, fn func(wp *LambdaUpdateWrapper[T])) *LambdaUpdateWrapper[T] {
 	if cond {
-		this.whereSegment.addFilter("", sqlkeyword.And, nil)
+		uwp.whereSegment.addFilter("", sqlkeyword.And, nil)
 		if fn != nil {
-			this.whereSegment.addFilter("", sqlkeyword.LeftBracket, nil)
-			fn(this)
-			this.whereSegment.addFilter("", sqlkeyword.RightBracket, nil)
+			uwp.whereSegment.addFilter("", sqlkeyword.LeftBracket, nil)
+			fn(uwp)
+			uwp.whereSegment.addFilter("", sqlkeyword.RightBracket, nil)
 		}
 	}
-	return this
+	return uwp
 }
 
-func (this *LambdaUpdateWrapper[T]) Set(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
+func (uwp *LambdaUpdateWrapper[T]) Set(cond bool, field any, val any) *LambdaUpdateWrapper[T] {
 	if cond {
-		this.setSegment.addSetter(this.getColumn(field), val)
+		uwp.setSegment.addSetter(uwp.getColumn(field), val)
 	}
-	return this
+	return uwp
 }
 
-func (this *LambdaUpdateWrapper[T]) GetWhere() (string, []any) {
-	return this.whereSegment.GetWhere()
+func (uwp *LambdaUpdateWrapper[T]) GetWhere() (string, []any) {
+	return uwp.whereSegment.GetWhere()
 }
 
-func (this *LambdaUpdateWrapper[T]) GetSet() map[string]any {
-	return this.setSegment.GetSet()
+func (uwp *LambdaUpdateWrapper[T]) GetSet() map[string]any {
+	return uwp.setSegment.GetSet()
 }
